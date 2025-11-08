@@ -270,6 +270,29 @@ const Index = () => {
                       <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-smooth" />
                     </a>
                   </div>
+
+                  {/* Course Grader */}
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Briefcase className="w-5 h-5 text-primary" />
+                      <h4 className="font-semibold text-lg"> Course Grader - 33:620:302:Management Skills</h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Sep 2023 - Dec 2023</p>
+                    <ul className="space-y-2 text-muted-foreground">
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary mt-1">•</span>
+                        <span>Served as the Course Grader for the Management Skills course in the Department of Management & Global Business (MGB) at Rutgers Business School</span>
+                      </li>
+                      
+                    </ul>
+                    
+                  </div>
+
+
+
+
+
+
                 </div>
               </div>
             </Card>
