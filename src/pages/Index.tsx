@@ -1,69 +1,138 @@
-import { Mail, Github, ArrowDown, ExternalLink, TrendingUp, Database, Brain, Code2, BarChart3, Sparkles, BookOpen, Briefcase, Award, GraduationCap, Package } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Mail, Github, ArrowDown, ExternalLink, TrendingUp, Database, Brain, Code2, BarChart3, Sparkles, BookOpen, Briefcase, Award, GraduationCap, Package, Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import profilePhoto from "@/assets/profile-photo.png";
 
 const Index = () => {
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Initialize dark mode from localStorage or system preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    // Only use dark mode if user explicitly saved it
+  if (savedTheme === 'dark') {
+    setIsDarkMode(true);
+    document.documentElement.classList.add('dark');
+  }
+  // Default is light mode (do nothing)
+}, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
   };
+
+  const scrollToSection = (id: string) => {
+    setIsMobileMenuOpen(false); // Close mobile menu when clicking a link
+    if (id === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const navLinks = [
+    { id: 'about', label: 'About' },
+    { id: 'education', label: 'Education' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'publications', label: 'Publications' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'other', label: 'Other' },
+    { id: 'contact', label: 'Contact' },
+  ];
 
   return (
     <div className="min-h-screen">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-serif font-semibold">Sarjak Maniar</h2>
-          <div className="flex gap-6">
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            {/* Logo - Clickable */}
+            <button
+              onClick={() => scrollToSection('top')}
+              className="text-xl font-serif font-semibold hover:text-primary transition-smooth"
             >
-              About
+              Sarjak Maniar
             </button>
-            <button 
-              onClick={() => scrollToSection('education')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Education
-            </button>
-            <button 
-              onClick={() => scrollToSection('experience')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Experience
-            </button>
-            <button 
-              onClick={() => scrollToSection('projects')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Projects
-            </button>
-            <button 
-              onClick={() => scrollToSection('publications')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Publications
-            </button>
-            <button 
-              onClick={() => scrollToSection('skills')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Skills
-            </button>
-            <button 
-              onClick={() => scrollToSection('other')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Other
-            </button>
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Contact
-            </button>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-6">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-smooth"
+                >
+                  {link.label}
+                </button>
+              ))}
+              
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg hover:bg-muted transition-smooth"
+                aria-label="Toggle dark mode"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5 text-muted-foreground hover:text-foreground" />
+                ) : (
+                  <Moon className="w-5 h-5 text-muted-foreground hover:text-foreground" />
+                )}
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="flex md:hidden items-center gap-4">
+              {/* Dark Mode Toggle - Mobile */}
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg hover:bg-muted transition-smooth"
+                aria-label="Toggle dark mode"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-5 h-5 text-muted-foreground" />
+                ) : (
+                  <Moon className="w-5 h-5 text-muted-foreground" />
+                )}
+              </button>
+
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 rounded-lg hover:bg-muted transition-smooth"
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6 text-foreground" />
+                ) : (
+                  <Menu className="w-6 h-6 text-foreground" />
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 space-y-3 animate-in slide-in-from-top">
+              {navLinks.map((link) => (
+                <button
+                  key={link.id}
+                  onClick={() => scrollToSection(link.id)}
+                  className="block w-full text-left px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-smooth"
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </nav>
 
@@ -201,21 +270,6 @@ const Index = () => {
                       <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-smooth" />
                     </a>
                   </div>
-
-                  {/*  Course Grader */}
-                  <div className="mt-6 pt-6 border-t border-border">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Briefcase className="w-5 h-5 text-primary" />
-                      <h4 className="font-semibold text-lg">Course Grader - 33:620:302:Management Skills</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-3">Sep 2023 - Dec 2023</p>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li className="flex items-start gap-2">
-                        <span className="text-primary mt-1">•</span>
-                        <span>Served as the course grader for the Management Skills course in the Department of Management & Global Business (MGB) at Rutgers Business School</span>
-                      </li>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </Card>
@@ -248,21 +302,6 @@ const Index = () => {
                   <p className="text-muted-foreground leading-relaxed">
                     <span className="font-medium">Relevant Courses:</span> Artificial Intelligence, Database Management System, Data Mining & Business Intelligence, Cloud Computing
                   </p>
-
-                  {/*  Envoy */}
-                  <div className="mt-6 pt-6 border-t border-border">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Briefcase className="w-5 h-5 text-primary" />
-                      <h4 className="font-semibold text-lg">Envoy and Database Assistant</h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-3">Mar 2021 - Apr 2022</p>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li className="flex items-start gap-2">
-                        <span className="text-primary mt-1">•</span>
-                        <span>Served as the Student Envoy to manage student's database, assist TPO, and company recruiters to conduct smooth on-campus interviews and bridged the communication gap</span>
-                      </li>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </Card>
@@ -759,6 +798,7 @@ const Index = () => {
                   "Python (Expert)",
                   "SQL (Advanced)",
                   "R (Intermediate)",
+                  "JavaScript/TypeScript"
                 ]
               },
               {
